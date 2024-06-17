@@ -13,7 +13,7 @@
 using namespace std;
 
 // Variables globales
-int width = 800, hight = 600; // tamaño inicial de la ventana
+int width = 800, height = 600; // tamaño inicial de la ventana
 int nPoints = 0; // cantidad de puntos
 int point[6]; // los puntos (hasta 3: x0,y0,x1,y1,x2,y2)
 int indexPoint =- 1; // índice del punto a editar
@@ -41,14 +41,14 @@ bool IsNearVertex(int x, int y, int vertexX, int vertexY, int radius)
 // Seguimiento del cursor
 void PassiveMotion_cb(int x, int y)
 {
-	y = hight - y; // el 0 está arriba
-	cout << x << "," << y << "                    \r" << flush;
+	y = height - y; // el 0 está arriba
+	cout << x << "," << y << "\r" << flush;
 }
 	
 // Drag (movimiento con algun boton apretado)
 void Motion_cb(int x, int y)
 {
-	y = hight - y; // el 0 está arriba
+	y = height - y; // el 0 está arriba
 	point[2 * indexPoint] = x;
 	point[2 * indexPoint + 1] = y; // fija el punto editado en x,y
 	glutPostRedisplay(); // avisa que se debe redibujar
@@ -67,12 +67,21 @@ void Mouse_cb(int button, int state, int x, int y)
 		
 // 4- Implementar la métrica del rombo para la detección del click cerca de un vértice
 // del triángulo.
-		if (IsNearVertex(x, y, 100, 100, 20) || // Vértice inferior izquierdo
+		if (nPoints < 3 
+			&& (IsNearVertex(x, y, 100, 100, 20) || // Vértice inferior izquierdo
 			IsNearVertex(x, y, 500, 100, 20) || // Vértice inferior derecho
-			IsNearVertex(x, y, 300, 400, 20))   // Vértice superior
+			IsNearVertex(x, y, 300, 400, 20)))   // Vértice superior
 		{
 			// Código para manejar el click cerca de un vértice del triángulo
+			return;
 		}
+			// Agregar el punto al vector de puntos
+			point[2 * nPoints] = x;
+			point[2 * nPoints + 1] = height - y; // el 0 está arriba
+			nPoints++;
+			
+			if (nPoints == 3)
+				glutPostRedisplay(); // Avisar que se debe redibujar
 	}
 }
 // 3- Modificar el programa para que el triángulo tenga líneas de borde, utilizando algún
@@ -92,33 +101,28 @@ void display_cb()
 	if (nPoints == 3) // Si ya están los tres puntos
 	{
 		
-		glColor3f(4.f, 6.f, 8.f);
+		// Dibujar el triángulo relleno
+		glColor3f(0.5f, 0.5f, 0.5f);
 		glBegin(GL_TRIANGLES);
-		for(int i=0; i < nPoints; i++) 
-			glVertex2i(point[2*i], point[2*i+1]);
+		glVertex2i(point[0], point[1]);
+		glVertex2i(point[2], point[3]);
+		glVertex2i(point[4], point[5]);
 		glEnd();
-	}
-	
-	// puntos (después del triángulo, para que se vean encima)
-	glColor3f(1.f, 2.f, 3.f);
-	glPointSize(5.0);
-	glBegin(GL_POINTS);
-	for(int i=0; i < nPoints; i++) 
-		glVertex2i(point[2*i], point[2*i+1]);
-	glEnd();
-	
-	// Dibujar el triángulo con línea de borde punteada
-	glEnable(GL_LINE_STIPPLE);
-	glLineStipple(2, 0x6666); // Patrón de punteado
-	glBegin(GL_LINE_LOOP);
-	glVertex2f(100, 100);
-	glVertex2f(500, 100);
-	glVertex2f(300, 400);
-	glEnd();
-	glDisable(GL_LINE_STIPPLE);
+		
+		// Dibujar el triángulo con línea de borde punteada
+		glEnable(GL_LINE_STIPPLE);
+		glLineStipple(2, 0x6666); // Patrón de punteado
+		glColor3f(1.0f, 1.0f, 1.0f);
+		glBegin(GL_LINE_LOOP);
+		glVertex2i(point[0], point[1]);
+		glVertex2i(point[2], point[3]);
+		glVertex2i(point[4], point[5]);
+		glEnd();
+		glDisable(GL_LINE_STIPPLE);
 	
 	// Intercambia los buffers (doble buffer)
 	glutSwapBuffers();
+	}
 }
 
 /* 5- En términos de eficiencia, ¿qué aspectos cuestionaría respecto al callback de
@@ -160,7 +164,7 @@ void initialize()
 	glutReshapeFunc (reshape_cb);
 	// Llamada a la función para no dibujar fuera de pantalla
 	glutMouseFunc(Mouse_cb);
-	// Lamada a función para seguir la posición del mouse desde la consola
+	// Lamada a función para seguir la posición del mouse
 	glutPassiveMotionFunc(PassiveMotion_cb);
 	// Llamada a función para borrar la ventana con la tecla ESC
 	glutKeyboardFunc(Keyboard_cb);
