@@ -187,7 +187,7 @@ void Initialize()
 	glutMouseFunc(Mouse_cb);
 	// Lamada a función para seguir la posición del mouse
 	glutPassiveMotionFunc(PassiveMotion_cb);
-	// Llamada a función para borrar la ventana con la tecla ESC
+	// Llamada a función para callbacks del teclado
 	glutKeyboardFunc(Keyboard_cb);
 	// Establecer el color de fondo
 	glClearColor(0.8f,0.5f,0.3f,0.f);
