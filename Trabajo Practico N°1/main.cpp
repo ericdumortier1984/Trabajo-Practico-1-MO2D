@@ -15,13 +15,13 @@
 using namespace std;
 
 // Variables globales
-int width = 800, height = 600; // tama√±o inicial de la ventana
+int width = 800, height = 600; // tamaÒo inicial de la ventana
 int nPoints = 0; // cantidad de puntos
 int point[6]; // los puntos (hasta 3: x0,y0,x1,y1,x2,y2)
 int indexPoint =- 1; // √≠ndice del punto a editar
 
-// Caracter√≠sticas del tri√°ngulo
-float fillColor[3] = {0.5f, 0.5f, 0.5f}; // color del interior del tri√°ngulo
+// Caracteristicas del triangulo
+float fillColor[3] = {0.5f, 0.5f, 0.5f}; // color del interior del triangulo
 
 void Keyboard_cb(unsigned char key, int x, int y)
 {
@@ -34,10 +34,10 @@ void Keyboard_cb(unsigned char key, int x, int y)
 		cout << "borra pantalla" << endl;
 	}
 	
-	// Promocional: Agregar una nueva tecla para cambiar las caracter√≠sticas del tri√°ngulo
+	// Promocional: Agregar una nueva tecla para cambiar las caracter√≠sticas del triangulo
 	if (key == 99) // Tecla 'c' (ASCII 99)
 	{
-		// Cambiar el color del interior del tri√°ngulo
+		// Cambiar el color del interior del triangulo
 		// Utilizamos static_cast para convertir a float el valor int devuelto por rand()
 		fillColor[0] = static_cast<float>(rand()) / RAND_MAX;
 		fillColor[1] = static_cast<float>(rand()) / RAND_MAX;
@@ -49,7 +49,7 @@ void Keyboard_cb(unsigned char key, int x, int y)
 
 bool IsNearVertex(int x, int y, int vertexX, int vertexY, int radius)
 {
-// 4- Implementar la m√©trica del rombo para la detecci√≥n del click cerca de un v√©rtice del tri√°ngulo.
+// 4- Implementar la metrica del rombo para la detecciÛn del click cerca de un vertice del triangulo.
 	int dx = abs(x - vertexX);
 	int dy = abs(y - vertexY);
 	return (dx + dy) <= (2 * radius);
@@ -58,13 +58,13 @@ bool IsNearVertex(int x, int y, int vertexX, int vertexY, int radius)
 // Seguimiento del cursor
 void PassiveMotion_cb(int x, int y)
 {
-	y = height - y; // el 0 est√° arriba
+	y = height - y; // el 0 est· arriba
 	cout << x << "," << y << " \r" << flush;
 }
 	
 void Motion_cb(int x, int y)
 {
-	y = height - y; // el 0 est√° arriba
+	y = height - y; // el 0 est· arriba
 	point[2 * indexPoint] = x;
 	point[2 * indexPoint + 1] = y; // fija el punto editado en x,y
 	glutPostRedisplay(); // avisa que se debe redibujar
@@ -73,7 +73,7 @@ void Motion_cb(int x, int y)
 void Mouse_cb(int button, int state, int x, int y)
 {
 	
-	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) // Bot√≥n izquierdo y clickeado
+	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) // BotÛn izquierdo y clickeado
 	{
 		indexPoint = -1;
 		cout << x << "," << y << "," << button << endl;
@@ -82,17 +82,17 @@ void Mouse_cb(int button, int state, int x, int y)
 // 2- Programar para que no pueda sacarse un punto fuera de la ventana.
 		if(x < 0 || x > glutGet(GLUT_WINDOW_WIDTH) || y < 0 || y > glutGet(GLUT_WINDOW_HEIGHT)) return;
 
-		// Detecci√≥n de cercan√≠a a los v√©rtices del tri√°ngulo
-		if (nPoints < 3 && (IsNearVertex(x, y, 100, 100, 20) || // V√©rtice inferior izquierdo
-				IsNearVertex(x, y, 500, 100, 20) || // V√©rtice inferior derecho
-			        IsNearVertex(x, y, 300, 400, 20)))   // V√©rtice superior 
+		// DetecciÛn de cercanÌa a los vertices del triangulo
+		if (nPoints < 3 && (IsNearVertex(x, y, 100, 100, 20) || // Vertice inferior izquierdo
+				IsNearVertex(x, y, 500, 100, 20) || // V√etice inferior derecho
+			        IsNearVertex(x, y, 300, 400, 20)))   // Vertice superior 
 		{ 
 			return;
 		}
 		
 		// Agregar el punto al vector de puntos
 		point[2 * nPoints] = x;
-		point[2 * nPoints + 1] = height - y; // el 0 est√° arriba
+		point[2 * nPoints + 1] = height - y; // el 0 est· arriba
 		nPoints++;
 			
 		if (nPoints == 3)
@@ -107,12 +107,12 @@ void Display_cb()
 	if (!nPoints)  // No hay nada
 	{
 		glutSwapBuffers(); 
-		return; // Manda al monitor la pantalla vac√≠a
+		return; // Manda al monitor la pantalla vacÌa
 	}
 	
-	if (nPoints == 3) // Si ya est√°n los tres puntos
+	if (nPoints == 3) // Si ya est·n los tres puntos
 	{
-		// Dibujar el tri√°ngulo relleno
+		// Dibujar el triangulo relleno
 		glColor3fv(fillColor);
 		glBegin(GL_TRIANGLES);
 		glVertex2i(point[0], point[1]);
@@ -120,7 +120,7 @@ void Display_cb()
 		glVertex2i(point[4], point[5]);
 		glEnd();
 		
-		// Puntos (despu√©s del tri√°ngulo, para que se vean encima)
+		// Puntos (despuÈs del triangulo, para que se vean encima)
 		glColor3f(1.f,0.f,0.f);
 		glPointSize(5.0); // punto grueso
 		glBegin(GL_POINTS);
@@ -128,9 +128,9 @@ void Display_cb()
 			glVertex2i(point[2 * i],point[2 * i+1]);
 		glEnd();
 		
-// 3- Modificar el programa para que el tri√°ngulo tenga l√≠neas de borde, utilizando alg√∫n patr√≥n de punteado.
+// 3- Modificar el programa para que el triangulo tenga lÌneas de borde, utilizando alg˙n patrÛn de punteado.
 		glEnable(GL_LINE_STIPPLE);
-		glLineStipple(2, 0x6666); // Patr√≥n de punteado
+		glLineStipple(2, 0x6666); // PatrÛn de punteado
 		glColor3f(1.f, 1.f, 1.f);
 		glBegin(GL_LINE_LOOP);
 		glVertex2i(point[0], point[1]);
@@ -144,14 +144,14 @@ void Display_cb()
 	}
 }
 
-/* 5- En t√©rminos de eficiencia, ¬øqu√© aspectos cuestionar√≠a respecto al callback de
+/* 5- En tÈrminos de eficiencia, øque aspectos cuestionarÌa respecto al callback de
 teclado?
 Al buscar eficiencia y no afectar el rendimiento en nuestro programa, 
 se puede cuestionar el callback de teclado
 si se necesita procesar una gran cantidad de entradas de teclado, 
-lo cu√°l implica llamar a una funci√≥n para cada evento de teclado.  
-Una alternativa m√°s eficiente ser√≠a procesar los eventos de teclado en un bucle principal del programa, 
-en lugar de utilizar un callback espec√≠fico.*/
+lo cu·l implica llamar a una funciÛn para cada evento de teclado.  
+Una alternativa m·s eficiente serÌa procesar los eventos de teclado en un bucle principal del programa, 
+en lugar de utilizar un callback especÌfico.*/
 
 void Reshape_cb (int w, int h) 
 {
@@ -160,7 +160,7 @@ void Reshape_cb (int w, int h)
 	if (w == 0||h == 0) return;
 	glViewport(0,0,w,h);
 	
-	// Establece la proyecci√≥n ortogr√°fica
+	// Establece la proyecciÛn ortogr·fica
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity ();
 	gluOrtho2D(0,w,0,h);
@@ -171,27 +171,23 @@ void Reshape_cb (int w, int h)
 void Initialize() 
 {
 	
-	// Establece el modo de visualizaci√≥n
+	// Establece el modo de visualizaciÛn
 	glutInitDisplayMode (GLUT_RGBA|GLUT_DOUBLE);
-	// Establece el tama√±o de la ventana
+	// Establece el tamaaÒo de la ventana
 	glutInitWindowSize (width, height);
-	// Establece la posici√≥n inicial de la ventana
+	// Establece la posiciÛn inicial de la ventana
 	glutInitWindowPosition (50, 50);
 	// Crea la ventana
 	glutCreateWindow ("TRABAJO PRACTICO 1");
-	// Establece la funci√≥n de dibujo
+	// Establece la funciÛn de dibujo
 	glutDisplayFunc (Display_cb);
-	// Establece la funci√≥n de redimensionamiento
+	// Establece la funciÛn de redimensionamiento
 	glutReshapeFunc (Reshape_cb);
-	// Llamada a la funci√≥n para no dibujar fuera de pantalla
+	// Llamada a la funciÛn para no dibujar fuera de pantalla
 	glutMouseFunc(Mouse_cb);
-	// Lamada a funci√≥n para seguir la posici√≥n del mouse
+	// Lamada a funciÛn para seguir la posiciÛn del mouse
 	glutPassiveMotionFunc(PassiveMotion_cb);
-<<<<<<< HEAD
 	// Llamada a funciÛn para callbacks del teclado
-=======
-	// Llamada a funci√≥n para callbacks del teclado
->>>>>>> refs/remotes/origin/main
 	glutKeyboardFunc(Keyboard_cb);
 	// Establecer el color de fondo
 	glClearColor(0.8f,0.5f,0.3f,0.f);
@@ -202,7 +198,7 @@ int main (int argc, char **argv)
 	
 	// Inicializa GLUT
 	glutInit (&argc, argv);
-	// Llama a la funci√≥n de inicializaci√≥n
+	// Llama a la funciÛn de inicializaciÛn
 	Initialize();
 	// Entra en el bucle principal de GLUT
 	glutMainLoop();
