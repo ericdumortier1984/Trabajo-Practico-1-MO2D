@@ -84,8 +84,8 @@ void Mouse_cb(int button, int state, int x, int y)
 
 		// Detección de cercanía a los vértices del triángulo
 		if (nPoints < 3 && (IsNearVertex(x, y, 100, 100, 20) || // Vértice inferior izquierdo
-							IsNearVertex(x, y, 500, 100, 20) || // Vértice inferior derecho
-			                IsNearVertex(x, y, 300, 400, 20)))   // Vértice superior 
+				IsNearVertex(x, y, 500, 100, 20) || // Vértice inferior derecho
+			        IsNearVertex(x, y, 300, 400, 20)))   // Vértice superior 
 		{ 
 			return;
 		}
