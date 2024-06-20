@@ -12,6 +12,8 @@
 #include <cmath>
 #endif
 
+#include <GL/freeglut.h> // Inclusion para reconocer los textos en pantalla
+
 using namespace std;
 
     // Variables globales
@@ -78,6 +80,29 @@ void Special_cb(int key, int xm = 0, int ym = 0)
 void Display_cb() 
 {
 	glClear(GL_COLOR_BUFFER_BIT); // Limpia el buffer de color
+	
+	// Escribir texto en la pantalla
+	glColor3f(1.0f, 1.0f, 1.0f); // Color del texto (blanco)
+	// Mensaje 1
+	glRasterPos2i(10, 580); // Posición del texto (x, y)
+	static const char* message1 = "* Clic izquierdo (3 puntos distintos) para crear triangulo, luego arrastar si se desea";
+	glutBitmapString(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)message1);
+	// Mensaje 2
+	glRasterPos2i(10, 560); // Posición del texto (x, y)
+	static const char* message2 = "* Tecla 'c' cambia color";
+	glutBitmapString(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)message2);
+	// Mensaje 3
+	glRasterPos2i(10, 540); // Posición del texto (x, y)
+	static const char* message3 = "* Tecla 'Esc' para borrar";
+	glutBitmapString(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)message3);
+	// Mensaje 4
+	glRasterPos2i(10, 520); // Posición del texto (x, y)
+	static const char* message4 = "* Tecla 'Backspace' borra un punto";
+	glutBitmapString(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)message4);
+	// Mensaje 5
+	glRasterPos2i(10, 500); // Posición del texto (x, y)
+	static const char* message5 = "* Alt + F4 sale del programa";
+	glutBitmapString(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)message5);
 	
 	if (!nPoints)  // No hay nada
 	{
